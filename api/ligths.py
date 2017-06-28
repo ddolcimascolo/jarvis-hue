@@ -58,7 +58,7 @@ def status(light=1):
 			
 def brightness(light, arg):
 	bri = arg[0]
-	bri = (int(bri)/100)*254
+	bri = int(float(bri)/100*254)
 	b.set_light(light,'bri',bri)
 
 def hue(light, arg):
