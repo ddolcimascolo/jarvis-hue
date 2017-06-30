@@ -29,13 +29,19 @@ lbl={
 		}
 	}
 
-def toggle_light(light=1):
+def on(light=1):
+	return toggle_light(light, True)
+
+def off(light=1):
+	return toggle_light(light, False)
+
+def toggle_light(light=1,state=None):
 	global TOSAY
 	try:
-		if (b.get_light(light,'on')):
-			b.set_light(light,'on',False)
-		else:
-			b.set_light(light,'on',True)
+		if state is None:
+			state = not b.get_light(light,'on')
+
+		b.set_light(light,'on',state)
 		status(light)
 	except: 
 		TOSAY= lbl[lang]['lamp']+" "+lbl[lang]['unknow']
@@ -64,11 +70,13 @@ def brightness(light, arg):
 def hue(light, arg):
 	colors=ast.literal_eval(arg[0])
 	color=arg[1]
-	command =  {'on' : True, 'bri' : colors[color]['bri'],'hue':colors[color]['hue'],'sat':colors[color]['sat']}
+	command =  {'on' : True, 'hue':colors[color]['hue'],'sat':colors[color]['sat']}
 	b.set_light(light, command)
 	
 def router(arg):
 	return {
+		'on': on,
+		'off': off,
 		'toggle': toggle_light,
 		'status': status,
 		'brightness':brightness,
